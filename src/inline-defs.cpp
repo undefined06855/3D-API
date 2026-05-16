@@ -2,7 +2,7 @@
 
 #ifdef GEODE_IS_IOS
 
-kmMat4* kmMat4RotationX(kmMat4* pOut, const kmScalar radians) {
+kmMat4* unlinked::kmMat4RotationX(kmMat4* pOut, const kmScalar radians) {
 	/*
 		 |  1  0       0       0 |
 	 M = |  0  cos(A) -sin(A)  0 |
@@ -34,7 +34,7 @@ kmMat4* kmMat4RotationX(kmMat4* pOut, const kmScalar radians) {
 	return pOut;
 }
 
-kmMat4* kmMat4RotationY(kmMat4* pOut, const kmScalar radians) {
+kmMat4* unlinked::kmMat4RotationY(kmMat4* pOut, const kmScalar radians) {
 	/*
 	     |  cos(A)  0   sin(A)  0 |
 	 M = |  0       1   0       0 |
@@ -65,7 +65,7 @@ kmMat4* kmMat4RotationY(kmMat4* pOut, const kmScalar radians) {
 	return pOut;
 }
 
-kmMat4* kmMat4RotationZ(kmMat4* pOut, const kmScalar radians) {
+kmMat4* unlinked::kmMat4RotationZ(kmMat4* pOut, const kmScalar radians) {
 	/*
 	     |  cos(A)  -sin(A)   0   0 |
 	 M = |  sin(A)   cos(A)   0   0 |
