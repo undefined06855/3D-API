@@ -1,6 +1,7 @@
 #include "inline-defs.hpp"
 
 #ifdef GEODE_IS_IOS
+
 kmMat4* const unlinked::kmMat4RotationPitchYawRoll(kmMat4* pOut, const kmScalar pitch, const kmScalar yaw, const kmScalar roll) {
     kmMat4 yaw_matrix;
     kmMat4 roll_matrix;
