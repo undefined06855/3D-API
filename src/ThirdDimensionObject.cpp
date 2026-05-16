@@ -1,6 +1,7 @@
 #include "ThirdDimensionObject.hpp"
 #include <geode.devtools/include/API.hpp>
 #include <OBJ_Loader.h>
+#include "inline-defs.hpp"
 
 using namespace ThreeDeeAPI;
 
@@ -206,10 +207,10 @@ void ThirdDimensionObject::draw(const kmMat4& projection) {
         kmMat4Translation(&translation, this->getPositionX(), this->getPositionY(), this->getPositionZ());
 
         kmMat4 rotation;
-        kmMat4RotationPitchYawRoll(&rotation, kmDegreesToRadians(this->getRotationX()), kmDegreesToRadians(this->getRotationY()), kmDegreesToRadians(this->getRotationZ()));
+        unlinked::kmMat4RotationPitchYawRoll(&rotation, kmDegreesToRadians(this->getRotationX()), kmDegreesToRadians(this->getRotationY()), kmDegreesToRadians(this->getRotationZ()));
 
         kmMat4 scale;
-        kmMat4Scaling(&scale, this->getScaleX(), this->getScaleY(), this->getScaleZ());
+        unlinked::kmMat4Scaling(&scale, this->getScaleX(), this->getScaleY(), this->getScaleZ());
 
         // translation * (rotation * scale)
         // https://gamedev.stackexchange.com/a/16721
