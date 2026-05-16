@@ -1,6 +1,6 @@
 #include "inline-defs.hpp"
 
-#ifndef GEODE_IS_IOS
+#ifdef GEODE_IS_IOS
 
 kmMat4* unlinked::kmMat4RotationX(kmMat4* pOut, const kmScalar radians) {
 	/*
