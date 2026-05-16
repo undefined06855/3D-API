@@ -121,7 +121,7 @@ cocos2d::CCTexture2D* ThirdDimensionNode::createTextures() {
 
     glRenderbufferStorage(
         GL_RENDERBUFFER,
-        GL_DEPTH_COMPONENT24,
+        GEODE_DESKTOP(GL_DEPTH_COMPONENT24) GEODE_MOBILE(GL_DEPTH_COMPONENT16),
         resolution.width,
         resolution.height
     );

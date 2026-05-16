@@ -53,7 +53,7 @@ bool ThirdDimensionObject::init() {
 }
 
 geode::Result<> ThirdDimensionObject::loadObject(geode::ZStringView object, bool flipUVs) {
-    auto path = cocos2d::CCFileUtils::get()->fullPathForFilename(object.c_str(), true);
+    std::string path = cocos2d::CCFileUtils::get()->fullPathForFilename(object.c_str(), true);
 
     auto loader = objl::Loader();
     if (!loader.LoadFile(geode::utils::string::pathToString(path))) {
