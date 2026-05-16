@@ -207,7 +207,10 @@ void ThirdDimensionNode::draw() {
         this->deleteManagedTextures();
         auto texture = this->createTextures();
         this->setTexture(texture);
-        this->setTextureRect({ 0.f, 0.f, m_impl->textureSize.width, m_impl->textureSize.height });
+        auto scaleFactor = cocos2d::CCDirector::get()->getContentScaleFactor();
+        this->setTextureRect({ 0.f, 0.f, m_impl->textureSize.width / scaleFactor, m_impl->textureSize.height / scaleFactor });
+
+        m_impl->textureDirty = false;
     }
 
     GLint origFramebuffer;
