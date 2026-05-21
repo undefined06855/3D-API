@@ -137,6 +137,11 @@ void ThirdDimensionObject::setScale3D(const cocos2d::CCPoint3D& scale) {
     this->setScaleZ(scale.z);
 }
 
+void ThirdDimensionObject::setTexture(cocos2d::CCTexture2D* texture) {
+    // since texture is a ref this should safely release the previous one and retain this new one
+    m_impl->texture = texture;
+}
+
 float ThirdDimensionObject::getPositionZ() { return m_impl->positionZ; }
 float ThirdDimensionObject::getRotationZ() { return m_impl->rotationZ; }
 float ThirdDimensionObject::getScaleZ() { return m_impl->scaleZ; }

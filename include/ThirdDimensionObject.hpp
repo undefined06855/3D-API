@@ -9,12 +9,13 @@ namespace ThreeDeeAPI {
 class THREEDEE_API_DLL ThirdDimensionObject : public cocos2d::CCNode {
 protected:
     ThirdDimensionObject();
-    ~ThirdDimensionObject();
 
     struct Impl;
     std::unique_ptr<Impl> m_impl;
 
 public:
+    ~ThirdDimensionObject();
+
     static ThirdDimensionObject* create();
     virtual bool init() override;
 
@@ -33,6 +34,8 @@ public:
     virtual void setPosition3D(const cocos2d::CCPoint3D& position);
     virtual void setRotation3D(const cocos2d::CCPoint3D& rotation);
     virtual void setScale3D(const cocos2d::CCPoint3D& scale);
+
+    void setTexture(cocos2d::CCTexture2D* texture);
 
     virtual float getPositionZ();
     virtual float getRotationZ();

@@ -24,6 +24,8 @@ struct HackCCTexture2D : cocos2d::CCTexture2D {
     }
 };
 
+// if you update defaults here, make sure to update the docs in the header file
+// also you probably shouldn't be updating defaults anyway since people might rely on them
 struct ThirdDimensionNode::Impl final {
     bool dirty = true;
     kmMat4 projectionViewMatrix = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
@@ -31,6 +33,9 @@ struct ThirdDimensionNode::Impl final {
     cocos2d::CCPoint3D pos = { 5.f, 5.f, 5.f };
     cocos2d::CCPoint3D aim = { 0.f, 0.f, 0.f };
     float fov = 90.f;
+
+    CameraType type = CameraType::Perspective;
+    CameraClippingBounds clippingBounds = { .1f, 2000.f };
 
     GLuint frameBuffer = 0;
     GLuint colorTexture = 0;
@@ -47,7 +52,7 @@ ThirdDimensionNode::~ThirdDimensionNode() {
 }
 
 void ThirdDimensionNode::deleteManagedTextures() {
-    // note: ccsprite's cctexture2d will release the texture for us
+    // note: ccsprite's cctexture2d will release the colour texture for us
 
     glDeleteFramebuffers(1, &m_impl->frameBuffer);
     glDeleteRenderbuffers(1, &m_impl->depthTexture);
@@ -160,6 +165,16 @@ void ThirdDimensionNode::setCameraFOV(float fov) {
     m_impl->dirty = true;
 }
 
+void ThirdDimensionNode::setCameraType(CameraType type) {
+    m_impl->type = type;
+    m_impl->dirty = true;
+}
+
+void ThirdDimensionNode::setClippingBounds(CameraClippingBounds bounds) {
+    m_impl->clippingBounds = bounds;
+    m_impl->dirty = true;
+}
+
 void ThirdDimensionNode::setResolutionLocked(bool locked) {
     m_impl->resolutionLocked = locked;
 }
@@ -176,6 +191,8 @@ void ThirdDimensionNode::setContentSize(const cocos2d::CCSize& size) {
 cocos2d::CCPoint3D ThirdDimensionNode::getCameraPosition() { return m_impl->pos; }
 cocos2d::CCPoint3D ThirdDimensionNode::getCameraAim() { return m_impl->aim; }
 float ThirdDimensionNode::getCameraFOV() { return m_impl->fov; }
+CameraType ThirdDimensionNode::getCameraType() { return m_impl->type; }
+CameraClippingBounds ThirdDimensionNode::getClippingBounds() { return m_impl->clippingBounds; }
 bool ThirdDimensionNode::getResolutionLocked() { return m_impl->resolutionLocked; }
 
 GLuint ThirdDimensionNode::getFBO() { return m_impl->frameBuffer; }
@@ -187,9 +204,12 @@ void ThirdDimensionNode::draw() {
         // create projection matrix
         kmMat4 proj;
         auto winSize = cocos2d::CCDirector::get()->getWinSizeInPixels();
-        float nearZ = .1f;
-        float farZ = 2000.0f;
-        kmMat4PerspectiveProjection(&proj, m_impl->fov, m_impl->textureSize.aspect(), nearZ, farZ);
+
+        if (m_impl->type == CameraType::Perspective) {
+            kmMat4PerspectiveProjection(&proj, m_impl->fov, m_impl->textureSize.aspect(), m_impl->clippingBounds.near, m_impl->clippingBounds.far);
+        } else {
+            kmMat4OrthographicProjection(&proj, 0.f, m_impl->fov * m_impl->textureSize.aspect(), 0.f, m_impl->fov, m_impl->clippingBounds.near, m_impl->clippingBounds.far);
+        }
 
         // create view matrix
         kmMat4 view;
