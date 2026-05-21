@@ -271,6 +271,9 @@ $on_mod(Loaded) {
 
             auto fov = node->getCameraFOV();
             if (devtools::property("FOV", fov)) { node->setCameraFOV(fov); }
+
+            auto type = node->getCameraType();
+            if (devtools::enumerable("Type", type, { { CameraType::Orthographic, "Orthographic" }, { CameraType::Perspective, "Perspective" } })) node->setCameraType(type);
         });
     });
 }
