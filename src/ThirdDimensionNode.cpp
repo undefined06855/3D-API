@@ -215,7 +215,7 @@ void ThirdDimensionNode::draw() {
         kmMat4 view;
         kmVec3 eye = { m_impl->pos.x, m_impl->pos.y, m_impl->pos.z };
         kmVec3 center = { m_impl->aim.x, m_impl->aim.y, m_impl->aim.z };
-        kmVec3 up = { 0, 1, 0 };
+        kmVec3 up = { 0.f, 1.f, 0.f };
         kmMat4LookAt(&view, &eye, &center, &up);
 
         kmMat4Multiply(&m_impl->projectionViewMatrix, &proj, &view);
