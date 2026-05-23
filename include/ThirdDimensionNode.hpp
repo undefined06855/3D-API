@@ -26,6 +26,8 @@ protected:
 
 public:
     ~ThirdDimensionNode();
+    
+    static void registerWithDevTools();
 
     /**
      * Creates a ThirdDimensionNode with a pre-specified resolution for the texture. You should specify a resolution in

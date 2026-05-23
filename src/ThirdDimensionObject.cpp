@@ -243,23 +243,36 @@ void ThirdDimensionObject::draw(const kmMat4& projection) {
     glBindVertexArray(0);
 }
 
+void ThirdDimensionObject::registerWithDevTools() {
+    devtools::registerNode<ThirdDimensionObject>([](ThirdDimensionObject* object) {
+        auto pos = object->getPosition3D();
+        if (devtools::property("X Position", pos.x)) { object->setPosition3D(pos); }
+        if (devtools::property("Y Position", pos.y)) { object->setPosition3D(pos); }
+        if (devtools::property("Z Position", pos.z)) { object->setPosition3D(pos); }
+
+        auto rot = object->getRotation3D();
+        if (devtools::property("X Rotation", rot.x)) { object->setRotation3D(rot); }
+        if (devtools::property("Y Rotation", rot.y)) { object->setRotation3D(rot); }
+        if (devtools::property("Z Rotation", rot.z)) { object->setRotation3D(rot); }
+
+        auto scale = object->getScale3D();
+        if (devtools::property("X Scale", scale.x)) { object->setScale3D(scale); }
+        if (devtools::property("Y Scale", scale.y)) { object->setScale3D(scale); }
+        if (devtools::property("Z Scale", scale.z)) { object->setScale3D(scale); }
+
+        auto mat = object->m_impl->transformation.mat;
+        devtools::label(fmt::format(
+            "Transformation Matrix:\n    {} {} {} {}\n    {} {} {} {}\n    {} {} {} {}\n    {} {} {} {}",
+            mat[0], mat[4], mat[8],  mat[12],
+            mat[1], mat[5], mat[9],  mat[13],
+            mat[2], mat[6], mat[10], mat[14],
+            mat[3], mat[7], mat[11], mat[15]
+        ));
+    });
+}
+
 $on_mod(Loaded) {
     devtools::waitForDevTools([] {
-        devtools::registerNode<ThirdDimensionObject>([](ThirdDimensionObject* object) {
-            auto pos = object->getPosition3D();
-            if (devtools::property("X Position", pos.x)) { object->setPosition3D(pos); }
-            if (devtools::property("Y Position", pos.y)) { object->setPosition3D(pos); }
-            if (devtools::property("Z Position", pos.z)) { object->setPosition3D(pos); }
-
-            auto rot = object->getRotation3D();
-            if (devtools::property("X Rotation", rot.x)) { object->setRotation3D(rot); }
-            if (devtools::property("Y Rotation", rot.y)) { object->setRotation3D(rot); }
-            if (devtools::property("Z Rotation", rot.z)) { object->setRotation3D(rot); }
-
-            auto scale = object->getScale3D();
-            if (devtools::property("X Scale", scale.x)) { object->setScale3D(scale); }
-            if (devtools::property("Y Scale", scale.y)) { object->setScale3D(scale); }
-            if (devtools::property("Z Scale", scale.z)) { object->setScale3D(scale); }
-        });
+        ThirdDimensionObject::registerWithDevTools();
     });
 }

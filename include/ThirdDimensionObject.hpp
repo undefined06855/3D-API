@@ -16,6 +16,8 @@ protected:
 public:
     ~ThirdDimensionObject();
 
+    static void registerWithDevTools();
+
     static ThirdDimensionObject* create();
     virtual bool init() override;
 
