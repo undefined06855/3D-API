@@ -28,7 +28,7 @@ struct HackCCTexture2D : cocos2d::CCTexture2D {
 // also you probably shouldn't be updating defaults anyway since people might rely on them
 struct ThirdDimensionNode::Impl final {
     bool dirty = true;
-    kmMat4 projectionViewMatrix = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+    kmMat4 projectionViewMatrix = { 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f };
 
     cocos2d::CCPoint3D pos = { 5.f, 5.f, 5.f };
     cocos2d::CCPoint3D aim = { 0.f, 0.f, 0.f };

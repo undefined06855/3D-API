@@ -7,7 +7,7 @@ using namespace ThreeDeeAPI;
 
 struct ThirdDimensionObject::Impl final {
     bool dirty = true;
-    kmMat4 transformation = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+    kmMat4 transformation = { 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f };
 
     float positionZ = 0.f;
     float rotationZ = 0.f;
