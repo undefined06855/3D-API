@@ -245,6 +245,7 @@ void ThirdDimensionNode::draw() {
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for (auto child : geode::cocos::CCArrayExt<ThirdDimensionObject>(this->getChildren())) {
+        if (!child->isVisible()) return;
         child->draw(m_impl->projectionViewMatrix);
     }
     glDisable(GL_DEPTH_TEST);
