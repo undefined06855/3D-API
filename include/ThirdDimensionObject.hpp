@@ -13,8 +13,9 @@ protected:
     struct Impl;
     std::unique_ptr<Impl> m_impl;
 
-    // loader is std::shared_ptr<obj::Loader> but i dont want to include the header in a public header file
-    geode::Result<> loadObjectFromLoader(auto loader);
+    // loader is std::shared_ptr<ThreeDeeAPI::Model> but i dont want to include the header for objl in a public header
+    // file
+    geode::Result<> loadObjectFromModel(auto loader);
 public:
     ~ThirdDimensionObject();
 
