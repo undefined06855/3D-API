@@ -30,7 +30,7 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 # fork of Bly7/OBJ-Loader
-CPMAddPackage("gh:undefined06855/OBJ-Loader#4db8ef5")
+CPMAddPackage("gh:undefined06855/OBJ-Loader#fa3b91e")
 target_include_directories(${PROJECT_NAME} PRIVATE ${OBJ-Loader_SOURCE_DIR}/Source)
 
 setup_geode_mod(${PROJECT_NAME})

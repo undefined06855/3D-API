@@ -1,6 +1,6 @@
 #include "ThirdDimensionObject.hpp"
 #include <geode.devtools/include/API.hpp>
-#include <OBJ_Loader.h>
+#include "ModelCache.hpp"
 #include "inline-defs.hpp"
 
 using namespace ThreeDeeAPI;
@@ -53,25 +53,9 @@ bool ThirdDimensionObject::init() {
     return true;
 }
 
-geode::Result<> ThirdDimensionObject::loadObject(geode::ZStringView object, bool flipUVs) {
-    std::string path = cocos2d::CCFileUtils::get()->fullPathForFilename(object.c_str(), true);
-
-    auto loader = objl::Loader();
-    if (!loader.LoadFile(geode::utils::string::pathToString(path))) {
-        return geode::Err("failed to load file");
-    }
-
-    if (loader.LoadedMeshes.size() == 0) {
-        return geode::Err("zero meshes found");
-    }
-
-    m_impl->mesh = std::move(loader.LoadedMeshes.at(0));
-
-    if (flipUVs) {
-        for (auto& vertex : m_impl->mesh->Vertices) {
-            vertex.TextureCoordinate.Y = 1.f - vertex.TextureCoordinate.Y;
-        }
-    }
+// loader is std::shared_ptr<objl::Loader>
+geode::Result<> ThirdDimensionObject::loadObjectFromLoader(auto loader) {
+    m_impl->mesh = loader->LoadedMeshes[0];
 
     glBindVertexArray(m_impl->vertexArray);
 
@@ -92,16 +76,44 @@ geode::Result<> ThirdDimensionObject::loadObject(geode::ZStringView object, bool
 
     glBindVertexArray(0);
 
-    if (loader.LoadedMaterials.size() != 0) {
-        m_impl->material = std::move(loader.LoadedMaterials.at(0));
+    if (loader->LoadedMaterials.size() != 0) {
+        m_impl->material = loader->LoadedMaterials.at(0);
         m_impl->texture = cocos2d::CCTextureCache::get()->addImage(/* diffuse */ m_impl->material->map_Kd.c_str(), false);
     }
 
     if (!m_impl->texture) {
+        geode::log::warn("no texture found for object!");
         m_impl->texture = cocos2d::CCTextureCache::get()->addImage("default.png"_spr, false);
     }
 
+    geode::log::trace("loaded object successfully");
+
     return geode::Ok();
+}
+
+geode::Result<> ThirdDimensionObject::loadRawObjFile(geode::ZStringView data, std::filesystem::path mtlSearchPathParent) {
+    auto loader = ModelCache::get().getLoaderFromData(data, geode::utils::string::pathToString(mtlSearchPathParent));
+
+    if (loader.isErr()) {
+        return geode::Err(loader.unwrapErr());
+    }
+
+    geode::log::trace("about to load raw obj file of {} bytes", data.size());
+
+    return loadObjectFromLoader(loader.unwrap());
+}
+
+geode::Result<> ThirdDimensionObject::loadObject(geode::ZStringView object) {
+    std::string path = cocos2d::CCFileUtils::get()->fullPathForFilename(object.c_str(), true);
+    auto loader = ModelCache::get().getLoaderFromCache(path);
+
+    if (loader.isErr()) {
+        return geode::Err(loader.unwrapErr());
+    }
+
+    geode::log::trace("about to load obj file {}", object);
+
+    return loadObjectFromLoader(loader.unwrap());
 }
 
 void ThirdDimensionObject::setPositionZ(float positionZ) {

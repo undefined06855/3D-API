@@ -13,6 +13,8 @@ protected:
     struct Impl;
     std::unique_ptr<Impl> m_impl;
 
+    // loader is std::shared_ptr<obj::Loader> but i dont want to include the header in a public header file
+    geode::Result<> loadObjectFromLoader(auto loader);
 public:
     ~ThirdDimensionObject();
 
@@ -25,9 +27,17 @@ public:
      * Loads a 3D object given a path (e.g. undefined0.3d-api/teapot.obj). You should call this after create, and check
      * the return value.
      * @param object The resource to load the object from, prefixed with mod id using _spr.
-     * @param flipUVs Whether to flip UVs upside-down (since cocos loads images upside-down, this flips it back).
      */
-    geode::Result<> loadObject(geode::ZStringView object, bool flipUVs = true);
+    geode::Result<> loadObject(geode::ZStringView object);
+
+    /**
+     * Loads a 3D object given the contents of a (text) .obj file. You should call this after create, and check
+     * the return value.
+     * @param data The data of the .obj file.
+     * @param mtlSearchPathParent The path of the parent directory of the mtl file, probably your mod's resources
+     * directory.
+     */
+    geode::Result<> loadRawObjFile(geode::ZStringView data, std::filesystem::path mtlSearchPathParent);
 
     virtual void setPositionZ(float positionZ);
     virtual void setRotationZ(float rotationZ);
