@@ -84,7 +84,12 @@ geode::Result<> ThirdDimensionObject::loadObjectFromModel(auto model) {
 
     // either because there's no material or invalid texture
     if (!m_impl->texture) {
-        geode::log::warn("no texture found for object!");
+        if (m_impl->material) {
+            geode::log::warn("invalid texture found for object!");
+        } else {
+            geode::log::trace("no texture found for object!");
+        }
+        
         m_impl->texture = cocos2d::CCTextureCache::get()->addImage("default.png"_spr, false);
     }
 
