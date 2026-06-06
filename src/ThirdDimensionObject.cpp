@@ -94,28 +94,18 @@ geode::Result<> ThirdDimensionObject::loadObjectFromModel(auto model) {
 }
 
 geode::Result<> ThirdDimensionObject::loadRawObjFile(geode::ZStringView data, std::filesystem::path mtlSearchPathParent) {
-    auto model = ModelCache::get().getModelFromData(data, geode::utils::string::pathToString(mtlSearchPathParent));
-
-    if (model.isErr()) {
-        return geode::Err(model.unwrapErr());
-    }
+    GEODE_UNWRAP_INTO(auto model, ModelCache::get().getModelFromData(data, geode::utils::string::pathToString(mtlSearchPathParent)));
 
     geode::log::trace("about to load raw obj file of {} bytes", data.size());
-
-    return loadObjectFromModel(model.unwrap());
+    return loadObjectFromModel(model);
 }
 
 geode::Result<> ThirdDimensionObject::loadObject(geode::ZStringView object) {
     std::string path = cocos2d::CCFileUtils::get()->fullPathForFilename(object.c_str(), true);
-    auto model = ModelCache::get().getModelFromCache(path);
-
-    if (model.isErr()) {
-        return geode::Err(model.unwrapErr());
-    }
+    GEODE_UNWRAP_INTO(auto model, ModelCache::get().getModelFromCache(path));
 
     geode::log::trace("about to load obj file {}", object);
-
-    return loadObjectFromModel(model.unwrap());
+    return loadObjectFromModel(model);
 }
 
 void ThirdDimensionObject::setPositionZ(float positionZ) {

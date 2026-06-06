@@ -17,7 +17,7 @@ ModelCache& ModelCache::get() {
 geode::Result<std::shared_ptr<Model>> ModelCache::getModelFromData(geode::ZStringView data, geode::ZStringView mtlSearchPath) {
     auto hashed = fmt::to_string(geode::utils::hash(data));
     if (m_cache.contains(hashed)) {
-        geode::log::trace("cache hit for loader with hash {}", hashed);
+        geode::log::trace("cache hit for model with hash {}", hashed);
         return geode::Ok(m_cache[hashed]);
     }
 
@@ -26,20 +26,15 @@ geode::Result<std::shared_ptr<Model>> ModelCache::getModelFromData(geode::ZStrin
         return geode::Err("failed to load file");
     }
 
-    auto model = this->handleLoader(loader);
-    if (model.isErr()) {
-        return geode::Err(model.unwrapErr());
-    }
+    GEODE_UNWRAP_INTO(m_cache[hashed], this->handleLoader(loader));
 
-    m_cache[hashed] = std::move(model.unwrap());
-
-    geode::log::trace("cache miss for loader with hash {}", hashed);
+    geode::log::trace("cache miss for model with hash {}", hashed);
     return geode::Ok(m_cache[hashed]);
 }
 
 geode::Result<std::shared_ptr<Model>> ModelCache::getModelFromCache(geode::ZStringView path) {
     if (m_cache.contains(path)) {
-        geode::log::trace("loaded loader from cache with path {}", path);
+        geode::log::trace("loaded model from cache with path {}", path);
         return geode::Ok(m_cache[path]);
     }
 
@@ -48,14 +43,9 @@ geode::Result<std::shared_ptr<Model>> ModelCache::getModelFromCache(geode::ZStri
         return geode::Err("failed to load file");
     }
 
-    auto model = this->handleLoader(loader);
-    if (model.isErr()) {
-        return geode::Err(model.unwrapErr());
-    }
+    GEODE_UNWRAP_INTO(m_cache[path], this->handleLoader(loader));
 
-    m_cache[path] = std::move(model.unwrap());
-
-    geode::log::trace("cache miss for loader with path {}", path);
+    geode::log::trace("cache miss for model with path {}", path);
     return geode::Ok(m_cache[path]);
 }
 
