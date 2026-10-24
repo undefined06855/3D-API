@@ -39,7 +39,7 @@ geode::Result<std::shared_ptr<Model>> ModelCache::getModelFromCache(geode::ZStri
     }
 
     auto loader = objl::Loader();
-    if (!loader.LoadFile(geode::utils::string::pathToString(path))) {
+    if (!loader.LoadFile(path)) {
         return geode::Err("failed to load file");
     }
 

@@ -19,8 +19,6 @@ protected:
 public:
     ~ThirdDimensionObject();
 
-    static void registerWithDevTools();
-
     static ThirdDimensionObject* create();
     virtual bool init() override;
 
@@ -38,7 +36,7 @@ public:
      * @param mtlSearchPathParent The path of the parent directory of the mtl file, probably your mod's resources
      * directory.
      */
-    geode::Result<> loadRawObjFile(geode::ZStringView data, std::filesystem::path mtlSearchPathParent);
+    geode::Result<> loadRawObjFile(geode::ZStringView data, asp::fs::PathView mtlSearchPathParent);
 
     virtual void setPositionZ(float positionZ);
     virtual void setRotationZ(float rotationZ);

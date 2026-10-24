@@ -10,6 +10,10 @@ endif()
 
 project(3DAPI VERSION 1.0.0)
 
+# for if devtools isnt ported or whatever yet
+# also since events seem to change every single major geode version for some reason
+set(USE_DEVTOOLS_API OFF)
+
 file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
